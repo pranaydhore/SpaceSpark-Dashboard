@@ -29,7 +29,6 @@ const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch orders
   const fetchOrders = () => {
     axios
       .get("https://spacespark-backend.onrender.com/orders")
@@ -42,18 +41,16 @@ const Orders = () => {
     fetchOrders();
   }, []);
 
-  // Delete order
   const handleDelete = async (id) => {
     try {
       await axios.delete(`https://spacespark-backend.onrender.com/orders/${id}`);
-      setOrders(orders.filter((o) => o._id !== id)); // update state
+      setOrders(orders.filter((o) => o._id !== id));
     } catch (error) {
       console.error("Error deleting order:", error);
       alert("Failed to delete order.");
     }
   };
 
-  // Sell order (for now same as delete)
   const handleSell = async (id) => {
     try {
       await axios.delete(`https://spacespark-backend.onrender.com/orders/${id}`);
@@ -99,71 +96,73 @@ const Orders = () => {
     <div style={{ padding: "20px" }}>
       <h2>Orders Dashboard</h2>
 
-      {/* Orders Table */}
-      <table
-        border="1"
-        cellPadding="8"
-        cellSpacing="0"
-        style={{ margin: "20px auto", width: "90%" }}
-      >
-        <thead>
-          <tr>
-            <th>Instrument</th>
-            <th>Qty</th>
-            <th>Price</th>
-            <th>Mode</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order._id}>
-              <td>{order.name}</td>
-              <td>{order.qty}</td>
-              <td>{order.price}</td>
-              <td>{order.mode}</td>
-              <td>
-                <button
-                  onClick={() => handleSell(order._id)}
-                  style={{
-                    marginRight: "10px",
-                    padding: "5px 10px",
-                    backgroundColor: "green",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                  }}
-                >
-                  Sell
-                </button>
-                <button
-                  onClick={() => handleDelete(order._id)}
-                  style={{
-                    padding: "5px 10px",
-                    backgroundColor: "red",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                  }}
-                >
-                  Delete
-                </button>
-              </td>
+      {/* Responsive Table */}
+      <div style={{ overflowX: "auto", margin: "20px 0" }}>
+        <table
+          border="1"
+          cellPadding="8"
+          cellSpacing="0"
+          style={{ width: "100%", minWidth: "600px", borderCollapse: "collapse" }}
+        >
+          <thead>
+            <tr>
+              <th>Instrument</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Mode</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <tr key={order._id}>
+                <td>{order.name}</td>
+                <td>{order.qty}</td>
+                <td>{order.price}</td>
+                <td>{order.mode}</td>
+                <td>
+                  <button
+                    onClick={() => handleSell(order._id)}
+                    style={{
+                      marginRight: "10px",
+                      padding: "5px 10px",
+                      backgroundColor: "green",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Sell
+                  </button>
+                  <button
+                    onClick={() => handleDelete(order._id)}
+                    style={{
+                      padding: "5px 10px",
+                      backgroundColor: "red",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/* Charts */}
-      <div style={{ width: "600px", margin: "20px auto" }}>
+      <div style={{ width: "100%", maxWidth: "600px", margin: "20px auto" }}>
         <Bar
           data={barData}
           options={{ responsive: true, plugins: { legend: { position: "top" } } }}
         />
       </div>
-      <div style={{ width: "600px", margin: "20px auto" }}>
+      <div style={{ width: "100%", maxWidth: "600px", margin: "20px auto" }}>
         <Line
           data={lineData}
           options={{ responsive: true, plugins: { legend: { position: "top" } } }}
